@@ -1,10 +1,11 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchWeather } from './api';
 import WeatherCard from './Components/WeatherCard';
 
 function App() {
-  const [city, setCity] = useState('');
+
+  const [city, setCity] = useState('Lahore');
   const [weather, setWeather] = useState(null)
   const [error, setError] = useState('')
 
@@ -13,7 +14,8 @@ function App() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    // event.();
+    console.log('called')
     try {
       const weather = await fetchWeather(city, setError);
       setWeather(weather);
@@ -21,19 +23,22 @@ function App() {
       setError("City not found");
     }
   };
-
+  useEffect(()=>{
+    handleSubmit()
+  },[])
+  
   return (
     <div className="App">
-      <h1 className='app_heading'>Weather App</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className='app_heading'>Weather App Using City Name</h1>
+      <div className='input-heading'>
         <input
           type="text"
           placeholder="Enter city"
           value={city}
           onChange={handleChange}
         />
-        <button type="submit">Search</button>
-      </form>
+        <button onClick={handleSubmit}>Search</button>
+      </div>
 
       {error ? (
         <p className='error'>{error}</p>
